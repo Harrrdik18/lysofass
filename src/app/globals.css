@@ -17,13 +17,6 @@
   --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -49,6 +42,16 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--supreme-dark-blue);
+}
+
+/* Hide scrollbar for vehicle sections */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
 }
 
 /* Smooth scrolling */
@@ -100,6 +103,46 @@ html {
 
 .animate-slide-in-right {
   animation: slideInRight 0.6s ease-out;
+}
+
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-fade-in {
+  animation: slideFadeIn 0.8s ease-out;
+}
+
+/* Vehicle section transitions */
+.vehicle-section-transition {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.vehicle-section-enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.vehicle-section-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.vehicle-section-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.vehicle-section-exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 /* Enhanced hover effects */
@@ -164,4 +207,44 @@ html {
 .section-transition.fade-out {
   opacity: 0;
   transform: translateY(20px);
+}
+
+/* Scroll snapping styles */
+.snap-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Custom scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+.scroll-indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.scroll-indicator-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
+
+.scroll-indicator-dot.active {
+  background: white;
+  transform: scale(1.25);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }

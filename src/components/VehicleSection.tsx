@@ -12,6 +12,7 @@ interface VehicleSectionProps {
 export default function VehicleSection({ vehicleType, description, modelType }: VehicleSectionProps) {
   const [activeComponent, setActiveComponent] = useState('cabin');
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const components = [
@@ -67,15 +68,49 @@ export default function VehicleSection({ vehicleType, description, modelType }: 
     return '/Passenger Alpha - Trim.mp4';
   };
 
+  // Handle video loading and auto-play
   useEffect(() => {
     if (videoRef.current) {
+      const video = videoRef.current;
+      
+      const handleLoadedData = () => {
+        setIsVideoLoaded(true);
+        // Auto-play when video is loaded
+        video.play().catch(() => {
+          // Ignore play errors - this prevents the Runtime AbortError
+        });
+      };
+
+      const handleCanPlay = () => {
+        if (isVideoLoaded && isPlaying) {
+          video.play().catch(() => {
+            // Ignore play errors
+          });
+        }
+      };
+
+      video.addEventListener('loadeddata', handleLoadedData);
+      video.addEventListener('canplay', handleCanPlay);
+
+      return () => {
+        video.removeEventListener('loadeddata', handleLoadedData);
+        video.removeEventListener('canplay', handleCanPlay);
+      };
+    }
+  }, [isPlaying, isVideoLoaded]);
+
+  // Handle play/pause state changes
+  useEffect(() => {
+    if (videoRef.current && isVideoLoaded) {
       if (isPlaying) {
-        videoRef.current.play();
+        videoRef.current.play().catch(() => {
+          // Ignore play errors
+        });
       } else {
         videoRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, isVideoLoaded]);
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -84,16 +119,18 @@ export default function VehicleSection({ vehicleType, description, modelType }: 
   const handleComponentChange = (componentId: string) => {
     setActiveComponent(componentId);
     // Reset video to beginning when changing components
-    if (videoRef.current) {
+    if (videoRef.current && isVideoLoaded) {
       videoRef.current.currentTime = 0;
       if (isPlaying) {
-        videoRef.current.play();
+        videoRef.current.play().catch(() => {
+          // Ignore play errors
+        });
       }
     }
   };
 
   return (
-    <section className="min-h-screen bg-black flex items-center">
+    <section className="h-screen bg-black flex items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Text Content */}
@@ -128,11 +165,16 @@ export default function VehicleSection({ vehicleType, description, modelType }: 
                 ref={videoRef}
                 className="w-full h-full object-cover"
                 autoPlay
-                loop
                 muted
                 playsInline
+                loop
+                preload="metadata"
                 key={getModelVideo(activeComponent)} // Force re-render when video changes
                 src={getModelVideo(activeComponent)}
+                onError={() => {
+                  // Handle video loading errors gracefully
+                  console.log('Video failed to load:', getModelVideo(activeComponent));
+                }}
               />
               
               {/* Video Controls Overlay */}
