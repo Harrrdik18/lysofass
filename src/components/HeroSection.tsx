@@ -22,6 +22,10 @@ export default function HeroSection() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
   return (
     <section className="relative min-h-screen bg-black flex items-center justify-center overflow-hidden">
       {/* Background Pattern */}
@@ -53,7 +57,7 @@ export default function HeroSection() {
           </div>
 
           {/* Prototype Note */}
-          <div className="text-gray-400 text-sm">
+          <div className="text-gray-400 text-sm mb-8">
             Click anywhere for next slide (Only written for prototype)
           </div>
 
@@ -61,16 +65,16 @@ export default function HeroSection() {
           <div className="mt-16 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8">
             {/* Vehicle Type Buttons */}
             <div className="flex space-x-4">
-              <button className="px-6 py-3 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors border border-white/20">
+              <button className="px-6 py-3 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 border border-white/20 hover:scale-105">
                 Passenger Vehicles
               </button>
-              <button className="px-6 py-3 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors border border-white/20">
+              <button className="px-6 py-3 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all duration-300 border border-white/20 hover:scale-105">
                 Commercial Vehicles
               </button>
             </div>
 
             {/* Play/Pause Button */}
-            <button className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors border border-white/20">
+            <button className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 border border-white/20 hover:scale-110">
               <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
@@ -79,8 +83,15 @@ export default function HeroSection() {
         </div>
       </div>
 
+      {/* Clickable overlay for next slide */}
+      <div 
+        className="absolute inset-0 cursor-pointer z-5"
+        onClick={handleNextSlide}
+        style={{ zIndex: 5 }}
+      />
+
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
         <div className="animate-bounce">
           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
@@ -89,7 +100,7 @@ export default function HeroSection() {
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
         {slides.map((_, index) => (
           <button
             key={index}

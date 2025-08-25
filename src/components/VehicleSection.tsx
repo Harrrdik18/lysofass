@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface VehicleSectionProps {
   vehicleType: string;
@@ -10,32 +11,84 @@ interface VehicleSectionProps {
 
 export default function VehicleSection({ vehicleType, description, modelType }: VehicleSectionProps) {
   const [activeComponent, setActiveComponent] = useState('cabin');
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const components = [
-    { id: 'composite', label: 'Composite body', icon: '🚗' },
-    { id: 'front', label: 'Front', icon: '🔧' },
-    { id: 'cabin', label: 'Cabin', icon: '🪑' },
-    { id: 'trunk', label: 'Trunk', icon: '📦' },
-    { id: 'exterior', label: 'Exterior', icon: '🚙' }
+    { 
+      id: 'composite', 
+      label: 'Composite body', 
+      icon: '/ca3f7d1aca7720c84c7d80fc4e21e4260dff0088.png' 
+    },
+    { 
+      id: 'front', 
+      label: 'Front', 
+      icon: '/ca3f7d1aca7720c84c7d80fc4e21e4260dff0088.png' 
+    },
+    { 
+      id: 'cabin', 
+      label: 'Cabin', 
+      icon: '/Cabin 1.png' 
+    },
+    { 
+      id: 'trunk', 
+      label: 'Trunk', 
+      icon: '/ca3f7d1aca7720c84c7d80fc4e21e4260dff0088.png' 
+    },
+    { 
+      id: 'exterior', 
+      label: 'Exterior', 
+      icon: '/ca3f7d1aca7720c84c7d80fc4e21e4260dff0088.png' 
+    }
   ];
 
-  const getModelImage = () => {
-    switch (modelType) {
-      case 'suv':
-        return '/Front.mp4';
-      case 'truck':
-        return '/Commercial Alpha.mp4';
-      case 'engine':
-        return '/Passenger Alpha - Trim.mp4';
-      case 'interior':
-        return '/Cabin.mp4';
-      case 'seat':
-        return '/Passenger Alpha - Trim.mp4';
-      case 'chassis':
-        return '/Trunk.mp4';
-      default:
-        return '/Front.mp4';
+  const getModelVideo = (component: string) => {
+    // For Passenger vehicles, use Passenger Alpha as base and specific videos for components
+    if (modelType === 'suv') {
+      switch (component) {
+        case 'composite':
+          return '/Passenger Alpha - Trim.mp4';
+        case 'front':
+          return '/Front.mp4';
+        case 'cabin':
+          return '/Cabin.mp4';
+        case 'trunk':
+          return '/Trunk.mp4';
+        case 'exterior':
+          return '/Exterior.mp4';
+        default:
+          return '/Passenger Alpha - Trim.mp4';
+      }
+    }
+    // For Commercial vehicles, use Commercial Alpha
+    else if (modelType === 'truck') {
+      return '/Commercial Alpha.mp4';
+    }
+    return '/Passenger Alpha - Trim.mp4';
+  };
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleComponentChange = (componentId: string) => {
+    setActiveComponent(componentId);
+    // Reset video to beginning when changing components
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      if (isPlaying) {
+        videoRef.current.play();
+      }
     }
   };
 
@@ -72,49 +125,69 @@ export default function VehicleSection({ vehicleType, description, modelType }: 
             {/* 3D Model Container */}
             <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video mb-8">
               <video
+                ref={videoRef}
                 className="w-full h-full object-cover"
                 autoPlay
                 loop
                 muted
                 playsInline
-                src={getModelImage()}
+                key={getModelVideo(activeComponent)} // Force re-render when video changes
+                src={getModelVideo(activeComponent)}
               />
               
-              {/* Overlay for interaction */}
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <div className="text-white text-center">
-                  <div className="text-4xl mb-2">🚗</div>
-                  <div className="text-sm">3D Model View</div>
-                </div>
+              {/* Video Controls Overlay */}
+              <div className="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                <button
+                  onClick={handlePlayPause}
+                  className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+                >
+                  {isPlaying ? (
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                  ) : (
+                    <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
 
             {/* Interactive Controls */}
             <div className="flex items-center justify-between">
               {/* Component Buttons */}
-              <div className="flex space-x-4">
+              <div className="flex space-x-6">
                 {components.map((component) => (
                   <button
                     key={component.id}
-                    onClick={() => setActiveComponent(component.id)}
-                    className={`flex flex-col items-center space-y-1 p-2 rounded-lg transition-colors ${
+                    onClick={() => handleComponentChange(component.id)}
+                    className={`flex flex-col items-center space-y-2 p-3 rounded-lg transition-all duration-300 ${
                       activeComponent === component.id
-                        ? 'bg-white/20 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-white/10'
+                        ? 'bg-white/20 text-white scale-105'
+                        : 'text-gray-400 hover:text-white hover:bg-white/10 hover:scale-105'
                     }`}
                   >
-                    <span className="text-lg">{component.icon}</span>
-                    <span className="text-xs text-center max-w-16">{component.label}</span>
+                    <div className="w-12 h-12 relative">
+                      <Image
+                        src={component.icon}
+                        alt={component.label}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-contain filter brightness-0 invert"
+                      />
+                    </div>
+                    <span className="text-xs text-center max-w-20">{component.label}</span>
                   </button>
                 ))}
               </div>
 
               {/* Play/Pause Button */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 ml-8">
                 <div className="w-px h-8 bg-white/30"></div>
                 <button
-                  onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors border border-white/20"
+                  onClick={handlePlayPause}
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-all duration-300 border border-white/20 hover:scale-110"
                 >
                   {isPlaying ? (
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">

@@ -15,26 +15,6 @@ export default function Home() {
       vehicleType: "Commercial vehicles",
       description: "Adding a nonwoven engineering for heavy-duty vehicles",
       modelType: "truck"
-    },
-    {
-      vehicleType: "Passenger vehicles",
-      description: "Having a nonwoven innovation from interior to exterior",
-      modelType: "engine"
-    },
-    {
-      vehicleType: "Passenger vehicles",
-      description: "Having a nonwoven innovation from interior to exterior",
-      modelType: "interior"
-    },
-    {
-      vehicleType: "Passenger vehicles",
-      description: "Having a nonwoven innovation from interior to exterior",
-      modelType: "seat"
-    },
-    {
-      vehicleType: "Passenger vehicles",
-      description: "Having a nonwoven innovation from interior to exterior",
-      modelType: "chassis"
     }
   ];
 
