@@ -46,6 +46,8 @@ const exterior = "/media/Exterior.a127ebb308e655c7e32c.mp4";
 const exteriorTab = "static/Exterior.png";
 const exteriorPoster =
   "https://supreme-group.vercel.app/static/media/Exterior-poster.dda82b2b32fdc26f0602.webp";
+console.log("Validation: Attempting to import react-transition-group");
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
