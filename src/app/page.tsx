@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ContactSection from "@/components/ContactUs";
 import HeroSection from "@/components/HeroSection";
-import NonwovenPresentation from "@/components/VehicleSource";
+import NonwovenPresentation from "@/components/VehicleSection";
 
 export default function Home() {
   const [lastScrollY, setLastScrollY] = useState<number>(0);

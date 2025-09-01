@@ -26,7 +26,7 @@ const HeroSection = () => {
         </p>
 
         {/* Main heading */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-light leading-tight mb-6">
+        <h1 className="text-4xl md:text-4xl lg:text-5xl font-light leading-tight mb-6">
           <span className="block font-semibold">
             Soft Trims and <span className="text-[#00BFFF]">NVH Solutions</span>
           </span>
@@ -42,16 +42,4 @@ const HeroSection = () => {
   );
 };
 
-/* 
-<div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-        <span className="sg-translate font-light pt-2 pb-3  text-lg  xl:text-xl 2xl:text-[1.375rem] text-white block leading-snug">
-          Driven by performance
-        </span>
-        <h2 className="sg-translate text-white font-light leading-tight pb-2 ">
-          <span className="font-semibold">
-            Soft trims and <span className="text-blue">NVH solutions</span>
-          </span>
-          <br className="hidden md:block" /> for seamless rides
-        </h2>
-      </div> */
 export default HeroSection;

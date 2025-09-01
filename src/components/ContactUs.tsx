@@ -1,50 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    subject: '',
-    message: ''
+    fullName: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = () => {
     // Handle form submission here
-    console.log('Form submitted:', formData);
+    console.log("Form submitted:", formData);
   };
 
   return (
     <section className="bg-[#006ABC] py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Contact Info */}
           <div className="text-white">
             <h2 className="text-4xl font-light mb-2">Get in touch</h2>
             <div className="w-12 h-0.5 bg-white mb-8"></div>
-            
+
             <div className="space-y-8">
               <div>
                 <p className="text-blue-100 mb-4">For general enquiries</p>
-                
+
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-white font-medium mb-1">Address :</h3>
-                    <p className="text-blue-100">110, 16th Road, Chembur, Mumbai – 400071</p>
+                    <p className="text-blue-100">
+                      110, 16th Road, Chembur, Mumbai – 400071
+                    </p>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-white font-medium mb-1">Phone :</h3>
                     <p className="text-blue-100">+91 22 25208422</p>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-white font-medium mb-1">E-mail :</h3>
                     <p className="text-blue-100">info@supremegroup.co.in</p>
@@ -67,7 +71,7 @@ const ContactSection = () => {
                   className="w-full bg-transparent border-b-2 border-blue-400 text-white placeholder-blue-200 py-3 px-0 focus:outline-none focus:border-white transition-colors duration-200"
                 />
               </div>
-              
+
               <div>
                 <input
                   type="email"
@@ -78,7 +82,7 @@ const ContactSection = () => {
                   className="w-full bg-transparent border-b-2 border-blue-400 text-white placeholder-blue-200 py-3 px-0 focus:outline-none focus:border-white transition-colors duration-200"
                 />
               </div>
-              
+
               <div>
                 <input
                   type="text"
@@ -89,7 +93,7 @@ const ContactSection = () => {
                   className="w-full bg-transparent border-b-2 border-blue-400 text-white placeholder-blue-200 py-3 px-0 focus:outline-none focus:border-white transition-colors duration-200"
                 />
               </div>
-              
+
               <div>
                 <textarea
                   name="message"
@@ -100,7 +104,7 @@ const ContactSection = () => {
                   className="w-full bg-transparent border-b-2 border-blue-400 text-white placeholder-blue-200 py-3 px-0 focus:outline-none focus:border-white transition-colors duration-200 resize-none"
                 ></textarea>
               </div>
-              
+
               <div className="pt-4">
                 <button
                   onClick={handleSubmit}
